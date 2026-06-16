@@ -478,7 +478,7 @@ function drawEff(){
   let g='';
   for(let p=0;p<=100;p+=25){const y=Yp(p);g+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#23242c"/><text x="${L-7}" y="${y+4}" fill="#6e7681" font-size="10" text-anchor="end">${p}</text>`;}
   for(let k=1;k<=4;k++){const v=mxt*k/4;g+=`<text x="${W-R+7}" y="${Yt(v)+4}" fill="#6e7681" font-size="10">${Math.round(v/1000)}k</text>`;}
-  g+=`<text x="10" y="${T+4}" fill="#3fb950" font-size="10">pass %</text><text x="${W-R+4}" y="${T+4}" fill="#388bfd" font-size="10">tokens</text>`;
+  g+=`<text x="10" y="9" fill="#3fb950" font-size="10">pass %</text><text x="${W-R+4}" y="9" fill="#388bfd" font-size="10">tokens</text>`;
   xcats.forEach((e,i)=>g+=`<text x="${X(i)}" y="${H-B+18}" fill="#c9d1d9" font-size="11" text-anchor="middle">${e}</text>`);
   const agg=series[0], hs=series.find(s=>s.id===HL)||agg;
   series.filter(s=>!s.agg&&s.id!==HL).forEach(s=>{
