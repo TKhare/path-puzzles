@@ -1,0 +1,152 @@
+{
+ "p00": {
+  "Fable 5": {
+   "attempts": 3,
+   "passes": 3,
+   "tok_sum": 26909,
+   "sec_sum": 278.2,
+   "perf_n": 3
+  },
+  "Opus 4.8": {
+   "attempts": 10,
+   "passes": 0,
+   "tok_sum": 58557,
+   "sec_sum": 724.1,
+   "perf_n": 10
+  },
+  "Opus 4.8 (high)": {
+   "attempts": 2,
+   "passes": 0
+  },
+  "Opus 4.8 (low)": {
+   "attempts": 5,
+   "passes": 0
+  },
+  "Opus 4.8 (max)": {
+   "attempts": 3,
+   "passes": 3
+  }
+ },
+ "s12": {
+  "Opus 4.8": {
+   "attempts": 12,
+   "passes": 0,
+   "tok_sum": 107485,
+   "sec_sum": 1381.5,
+   "perf_n": 12
+  }
+ },
+ "u02": {
+  "Opus 4.8": {
+   "attempts": 10,
+   "passes": 1,
+   "tok_sum": 70121,
+   "sec_sum": 873.6,
+   "perf_n": 10
+  }
+ },
+ "u03": {
+  "Opus 4.8": {
+   "attempts": 10,
+   "passes": 3,
+   "tok_sum": 60968,
+   "sec_sum": 743.1,
+   "perf_n": 10
+  },
+  "Haiku 4.5": {
+   "attempts": 1,
+   "passes": 0,
+   "tok_sum": 1466,
+   "sec_sum": 9.7,
+   "perf_n": 1
+  }
+ },
+ "u04": {
+  "Opus 4.8": {
+   "attempts": 10,
+   "passes": 2,
+   "tok_sum": 78931,
+   "sec_sum": 941.9,
+   "perf_n": 10
+  }
+ },
+ "u08": {
+  "Opus 4.8": {
+   "attempts": 10,
+   "passes": 2,
+   "tok_sum": 40485,
+   "sec_sum": 474.6,
+   "perf_n": 10
+  }
+ },
+ "s1_09": {
+  "Opus 4.8 (max)": {
+   "attempts": 5,
+   "passes": 3
+  },
+  "Opus 4.8 (low)": {
+   "attempts": 3,
+   "passes": 0
+  },
+  "Opus 4.8 (high)": {
+   "attempts": 3,
+   "passes": 0
+  }
+ },
+ "hov_01": {
+  "Opus 4.8 (max)": {
+   "attempts": 4,
+   "passes": 3
+  },
+  "Opus 4.8 (low)": {
+   "attempts": 3,
+   "passes": 2
+  },
+  "Opus 4.8 (high)": {
+   "attempts": 3,
+   "passes": 3
+  }
+ },
+ "subtle_05": {
+  "Opus 4.8 (max)": {
+   "attempts": 3,
+   "passes": 2
+  },
+  "Opus 4.8 (low)": {
+   "attempts": 3,
+   "passes": 1
+  },
+  "Opus 4.8 (high)": {
+   "attempts": 1,
+   "passes": 0
+  }
+ },
+ "s1_01": {
+  "Opus 4.8 (high)": {
+   "attempts": 3,
+   "passes": 1
+  },
+  "Opus 4.8 (max)": {
+   "attempts": 3,
+   "passes": 3
+  },
+  "Opus 4.8 (low)": {
+   "attempts": 3,
+   "passes": 0
+  }
+ },
+ "s1_02": {
+  "Opus 4.8 (high)": {
+   "attempts": 3,
+   "passes": 1
+  },
+  "Opus 4.8 (max)": {
+   "attempts": 2,
+   "passes": 2
+  },
+  "Opus 4.8 (low)": {
+   "attempts": 3,
+   "passes": 0
+  }
+ }
+}

@@ -155,7 +155,10 @@ input[type=checkbox]{accent-color:var(--accent)}
   </div>
 
   <details id="promptBox" style="margin-top:22px"><summary>prompt sent to the model</summary><pre class="code" id="promptText"></pre></details>
-  <div class="muted" style="font-size:12px;margin-top:14px">This is a static demo — the live “run a model” feature is disabled here. See the <b>Stats</b> tab for measured pass rates (3 runs each) across Opus 4.5, Sonnet 4.6 and Opus 4.8 at low/high/max effort.</div>
+  <div class="muted" style="font-size:12px;margin-top:14px">These live runs use <b>thinking&nbsp;off</b> (no extended
+  thinking) on purpose, so the model's full reasoning is observable in plain text rather than hidden in a thinking
+  block. It can call a <code>see_board</code> tool to view its attempt — the board above updates to exactly the
+  state it asks to see. Each run is a real API call.</div>
 
   <h2>all puzzles</h2>
   <div class="cards" id="moreCards"></div>
@@ -365,10 +368,6 @@ function recordSolve(pid,secs){               // time from first touch to solve 
 
 // ---------- watch a model ----------
 function runModel(){
-  $('modelVerdict').innerHTML='<span class="muted">Live model runs are disabled in this static demo. The <b>Stats</b> tab shows measured pass rates for Opus\u00a04.5, Sonnet\u00a04.6 and Opus\u00a04.8 (low/high/max).</span>';
-  $('liveMeta').textContent='live runs disabled in static demo';
-  return;
-
   if(curES)curES.close();
   const m=$('modelSel').value;
   $('runBtn').disabled=true;$('runBtn').textContent='running…';
@@ -391,8 +390,6 @@ function runModel(){
     if(r.correct)v.innerHTML='<span class="win">solved</span>';
     else if(!r.valid)v.innerHTML=`<span class="bad">failed · illegal path (${r.errors[0]||'invalid'})</span>`;
     else v.innerHTML=`<span class="bad">failed · left ${r.achieved} empty square${r.achieved>1?'s':''}</span> <span class="muted">— dashed = squares it left empty</span>`;
-    if(STATS&&STATS.stats){(STATS.stats[r.puzzle]=STATS.stats[r.puzzle]||{})[r.model]=r.puzzle_stats;
-      if(STATS.models.indexOf(r.model)<0)STATS.models.push(r.model);}
     renderCards();});
   es.addEventListener('error',e=>{let msg='connection error';try{msg=JSON.parse(e.data).msg;}catch(_){}
     if(e.data)$('convStatus').innerHTML=`<span class="bad">error: ${msg}</span>`;
@@ -451,12 +448,12 @@ function showView(v){
   $('navPlay').classList.toggle('on',v==='play');$('navStats').classList.toggle('on',v==='stats');
   if(v==='stats')refreshStats();
 }
-async function refreshStats(){STATS=await (await fetch('./data/stats.json')).json();renderStats();renderEffort();renderCards();}
+async function refreshStats(){STATS=await (await fetch('/api/stats')).json();renderStats();renderEffort();renderCards();}
 
 let EFFORT=null, HL='__agg';
 async function renderEffort(){
   const box=$('effortPlots'); if(!box) return;
-  try{ EFFORT=await (await fetch('./data/effort.json')).json(); }catch(e){ box.innerHTML='<p class="muted">No effort data.</p>'; return; }
+  try{ EFFORT=await (await fetch('/api/effort')).json(); }catch(e){ box.innerHTML='<p class="muted">No effort data.</p>'; return; }
   if(!EFFORT.curve||!EFFORT.curve.length){ box.innerHTML='<p class="muted">No effort-sweep data yet.</p>'; return; }
   HL='__agg';
   box.innerHTML=`<div class="effChart"><div id="effSvg"></div><div id="effLegend" class="effLegend"></div></div>
@@ -505,9 +502,9 @@ function maxPerPuzzleChart(arr){
   return `<div class="plot mpWrap"><div class="plotTitle">Pass rate at MAX effort, per puzzle</div>${rows}<div class="plotCap">Every hardest puzzle solves the majority of attempts at max — no clean max-fails found.</div></div>`;
 }
 async function init(){
-  const d=await (await fetch('./data/puzzles.json')).json();PUZZLES=d.puzzles;RUNNABLE=d.runnable;
+  const d=await (await fetch('/api/puzzles')).json();PUZZLES=d.puzzles;RUNNABLE=d.runnable;
   $('modelSel').innerHTML=RUNNABLE.map(m=>`<option value="${m.key}">${m.label}</option>`).join('');
-  STATS=await (await fetch('./data/stats.json')).json();
+  STATS=await (await fetch('/api/stats')).json();
   renderCards();
   loadFeatured(pickHardest());
 }
