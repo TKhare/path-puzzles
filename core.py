@@ -282,9 +282,9 @@ def parse_final_answer(text):
 PROMPT_TEMPLATE = """\
 Your goal is to connect the corresponding letters with paths, minimizing the number of squares without any path in them
 Rules:
-- no path can intersect itself
-- **intermediate paths may cross each other** (i.e. a single empty square may be used by more than one letter's path), but may not pass through any other letter / endpoint
-- paths move between orthogonally adjacent squares (up/down/left/right)
+- a path moves between orthogonally adjacent squares (up/down/left/right) and may not revisit any of its own squares (no self-intersection)
+- a path may not pass through any letter/endpoint square other than its own two matching endpoints
+- **Different letters' paths MAY OVERLAP — this is explicitly allowed and is NOT a conflict.** One and the same empty square can be used by MULTIPLE letters' paths at once — two, three, or more different letters may all route through it simultaneously. For example, empty square (2,2) may be part of A's path AND B's path AND C's path at the same time, and that is perfectly legal. (A square is "empty" only if NO path uses it; a square shared by one or several paths counts as covered. Overlapping costs you nothing.)
 
 No code or external tools allowed — solve by pure reasoning.
 
