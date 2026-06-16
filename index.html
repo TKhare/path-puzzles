@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>path puzzles</title>
+<style>
+:root{
+  --bg:#0d0e11; --ink:#e8e8ee; --mut:#8a8a96; --line:#23242b; --line2:#33343d;
+  --accent:#a78bfa; --green:#4ade80; --red:#f87171; --amber:#fbbf24;
+  --fill:#23242c; --card:#16171c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:14.5px/1.62 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none;cursor:pointer}
+a:hover{text-decoration:underline}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px 90px}
+header{border-bottom:1px solid var(--line);background:#0d0e11cc;backdrop-filter:blur(10px);
+  position:sticky;top:0;z-index:10}
+.hd{max-width:1040px;margin:0 auto;padding:12px 24px;display:flex;align-items:baseline;gap:16px}
+.brand{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--mut);letter-spacing:.02em}
+nav{margin-left:auto;display:flex;gap:18px}
+nav a{color:var(--mut);font-size:13px}nav a:hover{text-decoration:none;color:var(--ink)}
+nav a.on{color:var(--ink);font-weight:600}
+.intro{color:#c2c3cc;max-width:660px;margin:30px 0 16px}
+.intro b{color:var(--ink);font-weight:600}
+ul.rules{margin:0 0 6px;padding-left:18px;color:#b4b5bf;max-width:660px}
+ul.rules li{margin:3px 0}
+ul.rules b{color:var(--ink);font-weight:600}
+h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--mut);font-weight:600;
+  margin:48px 0 18px;border-top:1px solid var(--line);padding-top:22px}
+.board-head{display:flex;align-items:baseline;gap:14px;margin:36px 0 16px}
+#fTitle{font-weight:600;font-size:15px}
+.playrow{display:grid;grid-template-columns:264px 264px minmax(0,1fr);gap:30px;align-items:start;margin-top:6px}
+@media(max-width:900px){.playrow{grid-template-columns:1fr;gap:30px}}
+.rcol{min-width:0}
+#reasonText{max-height:255px;min-height:130px;width:100%}
+.lab{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--mut);
+  margin-bottom:12px;display:flex;align-items:center;gap:10px;min-height:22px}
+.modelpick{margin-left:auto;display:flex;gap:11px;align-items:center;text-transform:none;letter-spacing:0}
+.grid{display:grid;gap:3px;width:max-content;touch-action:none;margin-bottom:12px}
+.cell{position:relative;display:flex;align-items:center;justify-content:center;font-weight:700;
+  font-size:14px;border-radius:5px;background:#191a21;border:1px solid var(--line2);user-select:none}
+.cell.play{cursor:pointer}.cell.play:hover{border-color:#54555f}
+.cell.inpath{box-shadow:inset 0 0 0 2px currentColor}
+.cell .seq{position:absolute;bottom:0;right:2px;font-size:8px;opacity:.55;font-weight:700}
+.cell.blank{border-style:dashed;border-color:var(--red);background:#2a1618}
+.letters{margin-bottom:10px}
+.lrow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:6px;min-height:24px}
+.ltag{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;flex:0 0 52px}
+.lbtn{padding:2px 9px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;border:1px solid;background:transparent}
+.lbtn.active{box-shadow:0 0 0 2px var(--ink)}
+.status{font-size:13px;min-height:19px;color:#9a9aa6}
+.status b{color:var(--ink);font-weight:600}
+.win{color:var(--green);font-weight:600}.bad{color:var(--amber);font-weight:500}
+.verdict{font-size:13.5px;margin-top:6px;min-height:18px}
+.btnrow{display:flex;flex-wrap:wrap;gap:18px;margin-top:9px}
+button.link{background:none;border:none;color:var(--accent);font:inherit;font-size:13px;cursor:pointer;padding:0}
+button.link:hover{text-decoration:underline}
+button.link:disabled{color:var(--mut);cursor:default;text-decoration:none}
+select{font:inherit;font-size:13px;border:1px solid var(--line2);border-radius:6px;padding:3px 7px;
+  background:#191a21;color:var(--ink)}
+details{margin:26px 0 0;font-size:12.5px}
+details summary{cursor:pointer;color:var(--mut);font-size:12px;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary:before{content:'▸ ';color:var(--line2)}
+details[open] summary:before{content:'▾ '}
+pre.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;
+  white-space:pre-wrap;color:#c4c5cf;background:#121319;border:1px solid var(--line);border-radius:8px;
+  padding:14px;margin:9px 0 0;max-height:300px;overflow:auto}
+.trace{margin-top:22px}.trace .tl{font-size:12px;color:var(--mut)}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid var(--line2);border-top-color:var(--accent);
+  border-radius:99px;animation:sp .7s linear infinite;vertical-align:-1px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.muted{color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+.card{border:1px solid var(--line);border-radius:9px;padding:12px 13px;cursor:pointer;background:var(--card)}
+.card:hover{border-color:#3d3e48}
+.card .cid{font-weight:600}.card .csub{color:var(--mut);font-size:12px;margin-top:2px}
+.card .crate{font-size:12px;margin-top:9px;font-variant-numeric:tabular-nums;color:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 9px;text-align:center;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+th.sortable{cursor:pointer}th.sortable:hover{color:var(--ink)}
+td.pid{text-align:left;font-weight:600}td.pid a{color:var(--ink)}
+.rc{font-variant-numeric:tabular-nums;font-weight:600}
+input[type=checkbox]{accent-color:var(--accent)}
+.statsH{font-size:18px;font-weight:650;margin:0 0 6px}
+.sep{border:none;border-top:1px solid #23242c;margin:30px 0 20px}
+.plots{margin:10px 0 4px}
+.effChart{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.effChart>#effSvg{flex:1;min-width:340px}
+.effLegend{display:flex;flex-direction:column;gap:2px;font-size:12px;padding-top:8px;min-width:118px}
+.lgI{display:flex;align-items:center;gap:8px;color:var(--mut);cursor:pointer;padding:3px 7px;border-radius:5px}
+.lgI:hover,.lgI.on{color:var(--ink);background:#16171c}
+.lgSw{width:15px;height:3px;border-radius:2px;display:inline-block;flex:none}
+.effInfo{font-size:12.5px;color:var(--ink);margin:12px 0 2px;line-height:1.75}
+.plot{flex:1;min-width:300px;background:#121318;border:1px solid #23242c;border-radius:10px;padding:12px 14px}
+.plotTitle{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.plotCap{font-size:11px;color:var(--mut);margin-top:8px;line-height:1.45}
+.mpWrap{margin-top:18px}
+.mpRow{display:flex;align-items:center;gap:10px;margin:5px 0}
+.mpId{width:56px;font-size:12px;color:var(--ink);font-variant-numeric:tabular-nums}
+.mpBar{flex:1;height:14px;background:#1c1d24;border-radius:4px;overflow:hidden}
+.mpFill{height:100%;border-radius:4px}
+.mpVal{width:40px;font-size:11px;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<header><div class="hd">
+  <span class="brand">path puzzles</span>
+  <nav><a id="navPlay" class="on" onclick="showView('play')">play</a><a id="navStats" onclick="showView('stats')">stats</a></nav>
+</div></header>
+
+<div class="wrap">
+<section id="view-play">
+  <p class="intro">A set of <b>path puzzles</b>: connect each pair of matching letters with a path,
+  covering as many empty squares as you can. Solve one yourself, or run a model and watch it try.</p>
+  <ul class="rules">
+    <li>Connect each letter to its twin with an orthogonal path (up / down / left / right).</li>
+    <li><b>Intermediate paths may cross each other</b> (a single empty square can be used by more than one letter's path), but may not pass through any other letter.</li>
+    <li>Minimize the number of empty squares.</li>
+  </ul>
+
+  <div class="board-head"><span id="fTitle"></span><button class="link" onclick="nextPuzzle()">next →</button><button class="link" onclick="newPuzzle()">shuffle</button></div>
+
+  <div class="playrow">
+    <div>
+      <div class="lab">you <span id="timer" style="margin-left:auto;font-variant-numeric:tabular-nums;color:var(--mut);font-weight:500;text-transform:none;letter-spacing:0"></span></div>
+      <div class="grid" id="userGrid"></div>
+      <div class="letters" id="userLetters"></div>
+      <div class="status" id="userStatus"></div>
+      <div class="btnrow">
+        <button class="link" onclick="userPlayer.check()">check</button>
+        <button class="link" onclick="userPlayer.clearActive()">clear letter</button>
+        <button class="link" onclick="userPlayer.clearAll()">clear all</button>
+        <button class="link" onclick="userPlayer.showSolution()">solution</button>
+      </div>
+    </div>
+    <div>
+      <div class="lab">model
+        <span class="modelpick"><select id="modelSel"></select><button class="link" id="runBtn" onclick="runModel()">run</button></span>
+      </div>
+      <div class="grid" id="modelGrid"></div>
+      <div class="status"><span id="liveMeta" class="muted"></span></div>
+      <div class="verdict" id="modelVerdict"></div>
+    </div>
+    <div class="rcol">
+      <div class="lab">reasoning <span id="reasonMeta" class="muted" style="text-transform:none;letter-spacing:0;font-weight:400"></span></div>
+      <pre class="code" id="reasonText"></pre>
+      <div class="status muted" id="convStatus" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <details id="promptBox" style="margin-top:22px"><summary>prompt sent to the model</summary><pre class="code" id="promptText"></pre></details>
+  <div class="muted" style="font-size:12px;margin-top:14px">This is a static demo — the live “run a model” feature is disabled here. See the <b>Stats</b> tab for measured pass rates (3 runs each) across Opus 4.5, Sonnet 4.6 and Opus 4.8 at low/high/max effort.</div>
+
+  <h2>all puzzles</h2>
+  <div class="cards" id="moreCards"></div>
+</section>
+
+<section id="view-stats" hidden>
+  <h2 class="statsH">Pass rate by model &amp; reasoning effort</h2>
+  <p class="intro">Per-board pass rate, 3 runs each: Opus&nbsp;4.5, Sonnet&nbsp;4.6, and Opus&nbsp;4.8 at
+  low / high / max effort. Click a column header to sort (worst first; click again to reverse).
+  Pass = a legal solution with the fewest possible empty squares.</p>
+  <label class="muted" style="font-size:12px;display:inline-flex;gap:7px;align-items:center;margin-bottom:16px;cursor:pointer">
+    <input type="checkbox" id="optToggle" onchange="renderStats()"> show optimum</label>
+  <div style="overflow-x:auto"><table id="statsTable"></table></div>
+  <hr class="sep">
+  <h2 class="statsH">Pass rate vs reasoning effort</h2>
+  <p class="intro">Opus&nbsp;4.8 on these puzzles, swept across the effort knob (low→max), pure reasoning.
+  The "model fails" result is an <b>effort threshold</b>, not a capability wall — below max effort it leaves
+  squares empty (it won't overlap paths); at max effort it solves them, at 5–20× the compute.</p>
+  <div id="effortPlots" class="plots"></div>
+</section>
+</div>
+
+<script>
+const LC={A:"#f87171",B:"#60a5fa",C:"#4ade80",D:"#fbbf24",E:"#c084fc",F:"#f472b6",G:"#2dd4bf",H:"#facc15"};
+const $=id=>document.getElementById(id);
+const parseBoard=t=>t.trim().split('\n').map(r=>r.trim().split(/\s+/));
+const letterCells=g=>{const m={};g.forEach((row,r)=>row.forEach((ch,c)=>{
+  if(ch!=='_'){(m[ch]=m[ch]||[]).push([r,c]);}}));return m;};
+const eq=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const adj=(a,b)=>Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])===1;
+const key=a=>a[0]+','+a[1];
+const cellSize=cols=>Math.max(27,Math.min(40,Math.floor(336/cols)));
+
+let PUZZLES=[], RUNNABLE=[], cur=null, curIdx=0, userPlayer=null, curES=null, STATS=null;
+
+// ---------- interactive player ----------
+class Player{
+  constructor(puz,gridEl,lettersEl,statusEl){
+    this.puz=puz;this.gridEl=gridEl;this.lettersEl=lettersEl;this.statusEl=statusEl;
+    this.grid=parseBoard(puz.board);this.letters=letterCells(this.grid);
+    this.paths={};for(const ch in this.letters)this.paths[ch]=[this.letters[ch][0].slice()];
+    this.active=Object.keys(this.letters).sort()[0];
+    this.dragging=false;this.startTime=null;this.solved=false;this.revealed=false;this.solveSecs=0;this.timerInt=null;
+    {const te=$('timer');if(te){te.textContent='';te.style.color='var(--mut)';}}
+    this._down=e=>this.down(e);this._move=e=>this.move(e);this._up=e=>this.up(e);
+    gridEl.addEventListener('pointerdown',this._down);
+    gridEl.addEventListener('pointermove',this._move);
+    gridEl.addEventListener('pointerup',this._up);
+    gridEl.addEventListener('pointercancel',this._up);
+    lettersEl.onclick=e=>{const t=e.target.closest('.lbtn');if(t){this.active=t.dataset.l;this.render();}};
+    this.render();
+  }
+  covered(){const s=new Set();for(const ch in this.paths)for(const c of this.paths[ch])s.add(key(c));return s;}
+  valid(ch){const p=this.paths[ch],ep=this.letters[ch];
+    if(p.length<2)return false;
+    if(!((eq(p[0],ep[0])&&eq(p[p.length-1],ep[1]))||(eq(p[0],ep[1])&&eq(p[p.length-1],ep[0]))))return false;
+    const seen=new Set();
+    for(let i=0;i<p.length;i++){const k=key(p[i]);if(seen.has(k))return false;seen.add(k);
+      if(i>0&&!adj(p[i-1],p[i]))return false;
+      if(i>0&&i<p.length-1&&this.grid[p[i][0]][p[i][1]]!=='_')return false;}
+    return true;}
+  render(){
+    const cs=cellSize(this.puz.cols),g=this.grid;
+    this.gridEl.style.gridTemplateColumns=`repeat(${this.puz.cols},${cs}px)`;
+    this.gridEl.style.gridAutoRows=cs+'px';
+    const ap=this.paths[this.active],aidx={};ap.forEach((c,i)=>aidx[key(c)]=i);
+    const cover={};for(const ch in this.paths)for(const cc of this.paths[ch]){const kk=key(cc);if(!(kk in cover))cover[kk]=ch;}
+    let h='';
+    for(let r=0;r<this.puz.rows;r++)for(let c=0;c<this.puz.cols;c++){
+      const ch=g[r][c],k=r+','+c,isL=ch!=='_';
+      let st='',cls='cell play',inner='',extra='';
+      if(isL){const col=LC[ch],own=ch===this.active;
+        st=`background:${col}26;color:${col};border-color:${col}${own?'':'66'}`;
+        if(own)st+=`;box-shadow:inset 0 0 0 2px ${col}`;inner=ch;}
+      if(k in aidx){const ac=LC[this.active];cls+=' inpath';   // active letter: emphasized path
+        st+=`;color:${ac}`+(isL?'':`;background:${ac}40`);extra=`<span class="seq">${aidx[k]}</span>`;}
+      else if(!isL&&(k in cover)){const cc=LC[cover[k]];     // overall coverage: faint, colored by its letter
+        st=`background:${cc}22;border-color:${cc}33`;}
+      h+=`<div class="${cls}" data-r="${r}" data-c="${c}" style="${st}">${inner}${extra}</div>`;}
+    this.gridEl.innerHTML=h;
+    const all=Object.keys(this.letters).sort();
+    const chip=ch=>{const col=LC[ch];return `<div class="lbtn${ch===this.active?' active':''}" data-l="${ch}" style="color:${col};border-color:${col}88;background:${col}1c">${ch}</div>`;};
+    const unsolved=all.filter(c=>!this.valid(c)),done=all.filter(c=>this.valid(c));
+    this.lettersEl.innerHTML=
+      `<div class="lrow"><span class="ltag" style="color:var(--red)">unsolved</span>${unsolved.map(chip).join('')||'<span class="muted">—</span>'}</div>`+
+      `<div class="lrow"><span class="ltag" style="color:var(--green)">solved</span>${done.map(chip).join('')||'<span class="muted">—</span>'}</div>`;
+    const uncov=this.puz.rows*this.puz.cols-Object.keys(cover).length;
+    if(done.length===all.length&&uncov===this.puz.optimal&&this.startTime&&!this.solved&&!this.revealed){
+      this.solved=true;this.solveSecs=Math.round((performance.now()-this.startTime)/100)/10;
+      if(this.timerInt){clearInterval(this.timerInt);this.timerInt=null;}
+      const t=$('timer');if(t){t.textContent=this.solveSecs.toFixed(1)+'s';t.style.color='var(--green)';}
+      recordSolve(this.puz.id,this.solveSecs);
+    }
+    this.statusEl.innerHTML=this.solved
+      ?'<span class="win">solved!</span>'
+      :`drag from a letter to its match<br>connected ${done.length}/${all.length} · uncovered <b>${uncov}</b>`;
+  }
+  cellAt(e){            // which cell is the pointer over, from geometry (gaps don't read as null)
+    const rect=this.gridEl.getBoundingClientRect(),cs=cellSize(this.puz.cols),step=cs+3,tol=cs;
+    const x=e.clientX-rect.left,y=e.clientY-rect.top;
+    if(x<-tol||y<-tol||x>rect.width+tol||y>rect.height+tol)return null;   // well off the board
+    const c=Math.max(0,Math.min(this.puz.cols-1,Math.floor(x/step)));
+    const r=Math.max(0,Math.min(this.puz.rows-1,Math.floor(y/step)));
+    return [r,c];}
+  down(e){e.preventDefault();const rc=this.cellAt(e);if(!rc)return;const r=rc[0],c=rc[1];
+    if(!this.startTime){this.startTime=performance.now();this.timerInt=setInterval(()=>this.tick(),100);}  // first touch starts the clock
+    try{this.gridEl.setPointerCapture(e.pointerId);}catch(_){}   // capture on stable container
+    this.dragging=true;
+    if(this.grid[r][c]!=='_'){this.active=this.grid[r][c];this.paths[this.active]=[[r,c]];this.render();return;}
+    this.step(r,c);}                                  // tap on empty cell extends too
+  move(e){if(!this.dragging)return;e.preventDefault();const rc=this.cellAt(e);
+    if(!rc){this.reset();this.dragging=false;return;} // dragged off the board → line disappears
+    this.step(rc[0],rc[1]);}
+  up(e){this.dragging=false;try{this.gridEl.releasePointerCapture(e.pointerId);}catch(_){}}
+  tick(){const t=$('timer');if(!t)return;
+    if(this.solved||this.revealed){clearInterval(this.timerInt);this.timerInt=null;return;}
+    t.textContent=((performance.now()-this.startTime)/1000).toFixed(1)+'s';}
+  reset(){const p=this.paths[this.active];this.paths[this.active]=[p[0]];this.render();}
+  step(r,c){            // walk toward (r,c) one orthogonal cell at a time (handles fast drags)
+    let tail=this.paths[this.active][this.paths[this.active].length-1];
+    while(this.dragging&&!eq(tail,[r,c])){
+      const dr=Math.sign(r-tail[0]),dc=Math.sign(c-tail[1]);
+      if(dr!==0&&dc!==0)return;                        // diagonal: wait for an in-line move
+      if(!this.stepOne(tail[0]+dr,tail[1]+dc))return;
+      tail=this.paths[this.active][this.paths[this.active].length-1];
+    }
+  }
+  stepOne(r,c){
+    const p=this.paths[this.active],ep=this.letters[this.active],cell=this.grid[r][c],tail=p[p.length-1];
+    if(p.length>1&&this.grid[tail[0]][tail[1]]!=='_')return false;          // path already complete
+    if(p.some(x=>x[0]===r&&x[1]===c)){this.reset();this.dragging=false;return false;}  // back into itself
+    if(cell!=='_'){
+      const target=ep.find(e2=>!eq(e2,p[0]));
+      if(cell===this.active&&target&&eq([r,c],target)){p.push([r,c]);this.render();return true;}
+      this.reset();this.dragging=false;return false;                       // into another letter
+    }
+    p.push([r,c]);this.render();return true;                                // legal empty cell
+  }
+  destroy(){if(this.timerInt)clearInterval(this.timerInt);
+    this.gridEl.removeEventListener('pointerdown',this._down);
+    this.gridEl.removeEventListener('pointermove',this._move);
+    this.gridEl.removeEventListener('pointerup',this._up);
+    this.gridEl.removeEventListener('pointercancel',this._up);}
+  clearActive(){this.paths[this.active]=[this.letters[this.active][0].slice()];this.render();}
+  clearAll(){for(const ch in this.letters)this.paths[ch]=[this.letters[ch][0].slice()];this.render();}
+  showSolution(){
+    if(!this.puz.solution){this.statusEl.textContent='no stored solution.';return;}
+    this.revealed=true;                       // revealing the answer doesn't count as a timed solve
+    if(this.timerInt){clearInterval(this.timerInt);this.timerInt=null;}
+    this.paths={};for(const ch in this.puz.solution){let p=this.puz.solution[ch].map(([r,c])=>[r-1,c-1]);
+      if(this.letters[ch]&&!eq(p[0],this.letters[ch][0]))p.reverse();this.paths[ch]=p;}
+    this.render();this.statusEl.innerHTML='<span class="win">optimal solution shown</span>';
+  }
+  check(){
+    const all=Object.keys(this.letters),bad=all.filter(c=>!this.valid(c));
+    const uncov=this.puz.rows*this.puz.cols-this.covered().size;
+    if(bad.length)this.statusEl.innerHTML=`<span class="bad">not connected yet: ${bad.join(', ')}</span>`;
+    else if(uncov===this.puz.optimal)this.statusEl.innerHTML='<span class="win">solved!</span>';
+    else this.statusEl.innerHTML=`<span class="bad">all letters connected · ${uncov} empty square${uncov>1?'s':''} remaining</span>`;
+  }
+}
+
+// ---------- read-only attempt ----------
+function drawAttempt(puz,el,paths,markBlanks){
+  const cs=cellSize(puz.cols),g=parseBoard(puz.board);
+  el.style.gridTemplateColumns=`repeat(${puz.cols},${cs}px)`;el.style.gridAutoRows=cs+'px';
+  const own={};
+  for(const ch in paths)for(const c of paths[ch]){const k=(c[0]-1)+','+(c[1]-1);if(!(k in own))own[k]=ch;}
+  let h='';
+  for(let r=0;r<puz.rows;r++)for(let c=0;c<puz.cols;c++){
+    const ch=g[r][c],k=r+','+c,isL=ch!=='_';let st='',cls='cell',inner='';
+    if(isL){const col=LC[ch];st=`background:${col}26;color:${col};border-color:${col}66`;inner=ch;}
+    else if(k in own){const col=LC[own[k]];st=`background:${col}33;color:${col};box-shadow:inset 0 0 0 2px ${col}`;}
+    else if(markBlanks){cls+=' blank';}
+    h+=`<div class="${cls}" style="${st}">${inner}</div>`;}
+  el.innerHTML=h;
+}
+
+// ---------- featured ----------
+function loadFeatured(puz){
+  if(curES){curES.close();curES=null;}      // stop any in-flight model run
+  cur=puz;curIdx=PUZZLES.indexOf(puz);
+  $('fTitle').textContent=`${puz.display||puz.id} · ${puz.rows}×${puz.cols} · ${puz.n_letters} letters`;
+  if(userPlayer)userPlayer.destroy();
+  userPlayer=new Player(puz,$('userGrid'),$('userLetters'),$('userStatus'));
+  $('promptText').textContent=puz.prompt;
+  $('reasonText').textContent='';
+  $('convStatus').textContent='';$('modelVerdict').textContent='';$('liveMeta').textContent='not run yet';
+  $('runBtn').disabled=false;$('runBtn').textContent='run';
+  drawAttempt(puz,$('modelGrid'),{},false);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function loadFeaturedById(id){loadFeatured(PUZZLES.find(p=>p.id===id));}
+function nextPuzzle(){loadFeatured(PUZZLES[(curIdx+1)%PUZZLES.length]);}
+function newPuzzle(){loadFeatured(PUZZLES[Math.floor(Math.random()*PUZZLES.length)]);}
+function pickHardest(){   // random among the puzzles with the lowest Opus 4.8 pass rate
+  const rate=p=>{const c=STATS&&STATS.stats[p.id]&&STATS.stats[p.id]['Opus 4.8'];
+    return c&&c.attempts?c.passes/c.attempts:1;};
+  const lo=Math.min(...PUZZLES.map(rate));
+  const cands=PUZZLES.filter(p=>rate(p)===lo);
+  return cands[Math.floor(Math.random()*cands.length)]||PUZZLES[0];
+}
+function recordSolve(pid,secs){               // time from first touch to solve → backend
+  fetch('/api/solve',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({puzzle:pid,seconds:secs})}).catch(()=>{});
+}
+
+// ---------- watch a model ----------
+function runModel(){
+  $('modelVerdict').innerHTML='<span class="muted">Live model runs are disabled in this static demo. The <b>Stats</b> tab shows measured pass rates for Opus\u00a04.5, Sonnet\u00a04.6 and Opus\u00a04.8 (low/high/max).</span>';
+  $('liveMeta').textContent='live runs disabled in static demo';
+  return;
+
+  if(curES)curES.close();
+  const m=$('modelSel').value;
+  $('runBtn').disabled=true;$('runBtn').textContent='running…';
+  $('reasonText').textContent='';$('reasonMeta').innerHTML='<span class="spin"></span>';
+  $('convStatus').textContent='';$('modelVerdict').textContent='';$('liveMeta').textContent='waiting for first move…';
+  drawAttempt(cur,$('modelGrid'),{},false);
+  const es=new EventSource(`/api/attempt?puzzle=${cur.id}&model=${m}`);curES=es;
+  es.addEventListener('prompt',e=>{$('promptText').textContent=JSON.parse(e.data).text;});
+  es.addEventListener('text',e=>{const el=$('reasonText');el.textContent+=JSON.parse(e.data).t;el.scrollTop=el.scrollHeight;});
+  es.addEventListener('snapshot',e=>{const s=JSON.parse(e.data);
+    if(s.reset){drawAttempt(cur,$('modelGrid'),{},false);$('liveMeta').textContent='reset · attempt unclear';}
+    else{drawAttempt(cur,$('modelGrid'),s.paths,false);
+      $('liveMeta').textContent=`${Object.keys(s.paths).length}/${cur.n_letters} letters routed`;}});
+  es.addEventListener('status',e=>{$('reasonMeta').textContent='complete';
+    $('convStatus').innerHTML='<span class="spin"></span>grading…';});
+  es.addEventListener('result',e=>{const r=JSON.parse(e.data);$('convStatus').textContent='';
+    $('reasonMeta').textContent=`${r.output_tokens.toLocaleString()} tokens · ${r.seconds}s`;$('liveMeta').textContent='final';
+    drawAttempt(cur,$('modelGrid'),r.paths,true);
+    const v=$('modelVerdict');
+    if(r.correct)v.innerHTML='<span class="win">solved</span>';
+    else if(!r.valid)v.innerHTML=`<span class="bad">failed · illegal path (${r.errors[0]||'invalid'})</span>`;
+    else v.innerHTML=`<span class="bad">failed · left ${r.achieved} empty square${r.achieved>1?'s':''}</span> <span class="muted">— dashed = squares it left empty</span>`;
+    if(STATS&&STATS.stats){(STATS.stats[r.puzzle]=STATS.stats[r.puzzle]||{})[r.model]=r.puzzle_stats;
+      if(STATS.models.indexOf(r.model)<0)STATS.models.push(r.model);}
+    renderCards();});
+  es.addEventListener('error',e=>{let msg='connection error';try{msg=JSON.parse(e.data).msg;}catch(_){}
+    if(e.data)$('convStatus').innerHTML=`<span class="bad">error: ${msg}</span>`;
+    es.close();curES=null;$('runBtn').disabled=false;$('runBtn').textContent='run';$('reasonMeta').textContent='';});
+  es.addEventListener('done',e=>{es.close();curES=null;$('runBtn').disabled=false;$('runBtn').textContent='run';});
+}
+
+// ---------- cards ----------
+function renderCards(){
+  let h='';for(const p of PUZZLES){const c=STATS&&STATS.stats[p.id]&&STATS.stats[p.id]['Opus 4.8'];
+    const rate=c&&c.attempts?`opus 4.8 ${c.passes}/${c.attempts}`:'';
+    h+=`<div class="card" onclick='loadFeaturedById("${p.id}")'>
+      <div class="cid">${p.display||p.id}</div><div class="csub">${p.rows}×${p.cols} · ${p.n_letters} letters</div>
+      <div class="crate">${rate}</div></div>`;}
+  $('moreCards').innerHTML=h;
+}
+
+// ---------- stats ----------
+let sortCol=-1,sortDir=1;
+function rateColor(r){if(r==null)return'var(--mut)';if(r===0)return'var(--red)';if(r===1)return'var(--green)';return'var(--amber)';}
+function renderStats(){
+  const S=STATS,models=S.models;
+  const optShown=$('optToggle')&&$('optToggle').checked;
+  const base=optShown?3:2;
+  let head=`<thead><tr><th class="sortable" onclick="sortStats(0,'txt')">puzzle</th><th>size</th>`;
+  if(optShown)head+=`<th class="sortable" onclick="sortStats(2,'num')">opt</th>`;
+  models.forEach((m,i)=>head+=`<th class="sortable" onclick="sortStats(${base+i},'rate')">${m}</th>`);
+  head+='</tr></thead><tbody id="sbody">';
+  let body='';
+  for(const pid of S.order){
+    const disp=(S.display&&S.display[pid])||pid;
+    body+=`<tr><td class="pid" data-v="${disp}"><a onclick='showView("play");loadFeaturedById("${pid}")'>${disp}</a></td>`;
+    body+=`<td class="muted">${S.sizes[pid]}</td>`;
+    if(optShown)body+=`<td data-v="${S.optima[pid]}" class="muted">${S.optima[pid]}</td>`;
+    for(const m of models){const c=S.stats[pid]&&S.stats[pid][m];
+      if(c&&c.attempts){const r=c.passes/c.attempts;
+        body+=`<td data-v="${r.toFixed(4)}"><span class="rc" style="color:${rateColor(r)}">${c.passes}/${c.attempts}</span></td>`;}
+      else body+=`<td data-v=""><span class="muted">·</span></td>`;}
+    body+='</tr>';}
+  $('statsTable').innerHTML=head+body+'</tbody>';
+  sortCol=-1;
+  const sortPref=['Opus 4.8 (max)','Opus 4.8 (high)','Opus 4.5'].find(m=>models.indexOf(m)>=0)||models[0];
+  if(sortPref)sortStats(base+models.indexOf(sortPref),'rate');
+}
+function sortStats(col,type){
+  const tb=$('sbody'),rows=[...tb.rows];
+  sortDir=(sortCol===col)?-sortDir:1;sortCol=col;
+  const val=c=>{let v=c.dataset.v;if(type==='txt')return v;if(v===''||v==null)return Infinity;v=parseFloat(v);return isNaN(v)?Infinity:v;};
+  rows.sort((a,b)=>{const x=val(a.cells[col]),y=val(b.cells[col]);if(x<y)return -sortDir;if(x>y)return sortDir;return 0;});
+  rows.forEach(r=>tb.appendChild(r));
+}
+
+// ---------- nav / init ----------
+function showView(v){
+  $('view-play').hidden=v!=='play';$('view-stats').hidden=v!=='stats';
+  $('navPlay').classList.toggle('on',v==='play');$('navStats').classList.toggle('on',v==='stats');
+  if(v==='stats')refreshStats();
+}
+async function refreshStats(){STATS=await (await fetch('./data/stats.json')).json();renderStats();renderEffort();renderCards();}
+
+let EFFORT=null, HL='__agg';
+async function renderEffort(){
+  const box=$('effortPlots'); if(!box) return;
+  try{ EFFORT=await (await fetch('./data/effort.json')).json(); }catch(e){ box.innerHTML='<p class="muted">No effort data.</p>'; return; }
+  if(!EFFORT.curve||!EFFORT.curve.length){ box.innerHTML='<p class="muted">No effort-sweep data yet.</p>'; return; }
+  HL='__agg';
+  box.innerHTML=`<div class="effChart"><div id="effSvg"></div><div id="effLegend" class="effLegend"></div></div>
+    <div id="effInfo" class="effInfo"></div>
+    <div class="plotCap">Aggregate (white, left axis = pass %) is the headline; each puzzle is a faint green line — hover a line or legend entry to highlight it. The blue dashed line is that series' mean output tokens (right axis); wall-clock is in the readout below the chart.</div>`;
+  drawEff();
+}
+function effSeries(){
+  const out=[{id:'__agg',label:'All puzzles',pts:EFFORT.curve,agg:true}];
+  for(const [pid,pts] of Object.entries(EFFORT.puzzles||{})) out.push({id:pid,label:pid,pts,agg:false});
+  return out;
+}
+function setHL(id){ if(HL===id) return; HL=id; drawEff(); }
+function drawEff(){
+  const series=effSeries(), xcats=EFFORT.curve.map(c=>c.effort), idx=e=>xcats.indexOf(e);
+  const W=640,H=300,L=46,R=54,T=18,B=44;
+  const X=i=>L+(xcats.length<=1?0.5:i/(xcats.length-1))*(W-L-R), Yp=r=>T+(1-r/100)*(H-T-B);
+  const mxt=Math.max(...series.flatMap(s=>s.pts.map(p=>p.mean_tok||0)),1)*1.12, Yt=t=>T+(1-t/mxt)*(H-T-B);
+  const rP=s=>s.pts.filter(p=>idx(p.effort)>=0).map(p=>`${X(idx(p.effort))},${Yp(p.rate)}`).join(' ');
+  const tP=s=>s.pts.filter(p=>p.mean_tok&&idx(p.effort)>=0).map(p=>`${X(idx(p.effort))},${Yt(p.mean_tok)}`).join(' ');
+  const poly=(pts,c,w,o,ex='')=>`<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="${w}" opacity="${o}" ${ex}/>`;
+  let g='';
+  for(let p=0;p<=100;p+=25){const y=Yp(p);g+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#23242c"/><text x="${L-7}" y="${y+4}" fill="#6e7681" font-size="10" text-anchor="end">${p}</text>`;}
+  for(let k=1;k<=4;k++){const v=mxt*k/4;g+=`<text x="${W-R+7}" y="${Yt(v)+4}" fill="#6e7681" font-size="10">${Math.round(v/1000)}k</text>`;}
+  g+=`<text x="10" y="${T+4}" fill="#3fb950" font-size="10">pass %</text><text x="${W-R+4}" y="${T+4}" fill="#388bfd" font-size="10">tokens</text>`;
+  xcats.forEach((e,i)=>g+=`<text x="${X(i)}" y="${H-B+18}" fill="#c9d1d9" font-size="11" text-anchor="middle">${e}</text>`);
+  const agg=series[0], hs=series.find(s=>s.id===HL)||agg;
+  series.filter(s=>!s.agg&&s.id!==HL).forEach(s=>{
+    g+=poly(rP(s),'#3fb950',1.3,0.26,`style="cursor:pointer" onmouseover="setHL('${s.id}')"`);
+    s.pts.forEach(p=>{if(idx(p.effort)<0)return;g+=`<circle cx="${X(idx(p.effort))}" cy="${Yp(p.rate)}" r="2.7" fill="#3fb950" opacity="0.4" style="cursor:pointer" onmouseover="setHL('${s.id}')"/>`;});
+  });
+  g+=poly(rP(agg),'#e6edf3',HL==='__agg'?3:2,HL==='__agg'?1:0.45,`style="cursor:pointer" onmouseover="setHL('__agg')"`);
+  if(HL!=='__agg') g+=poly(rP(hs),'#3fb950',3,1,'');
+  g+=poly(tP(hs),'#388bfd',2,0.85,'stroke-dasharray="5 4"');
+  hs.pts.forEach(p=>{if(idx(p.effort)<0)return;const x=X(idx(p.effort)),y=Yp(p.rate);
+    g+=`<circle cx="${x}" cy="${y}" r="4.5" fill="${HL==='__agg'?'#e6edf3':'#3fb950'}"/><text x="${x}" y="${y-9}" fill="#e6edf3" font-size="11" text-anchor="middle" font-weight="600">${p.rate}%</text>`;
+    if(p.mean_tok)g+=`<circle cx="${x}" cy="${Yt(p.mean_tok)}" r="3" fill="#388bfd"/>`;});
+  $('effSvg').innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%">${g}</svg>`;
+  $('effLegend').innerHTML=series.map(s=>`<div class="lgI${s.id===HL?' on':''}" onmouseover="setHL('${s.id}')"><span class="lgSw" style="background:${s.agg?'#e6edf3':'#3fb950'}"></span>${s.label}</div>`).join('');
+  $('effInfo').innerHTML=`<b>${hs.label}</b> &nbsp; `+hs.pts.map(p=>`${p.effort} <span style="color:#3fb950">${p.rate}%</span> <span class="muted">(n=${p.total}${p.mean_tok?', '+(p.mean_tok/1000).toFixed(1)+'k tok':''}${p.mean_wall?', '+p.mean_wall+'s':''})</span>`).join(' &nbsp;·&nbsp; ');
+}
+function maxPerPuzzleChart(arr){
+  if(!arr||!arr.length) return '';
+  const rows=arr.map(p=>{const pct=Math.round(100*p.passes/p.total);
+    return `<div class="mpRow"><span class="mpId">${p.puzzle}</span><div class="mpBar"><div class="mpFill" style="width:${pct}%;background:${pct>=50?'#3fb950':'#d29922'}"></div></div><span class="mpVal">${p.passes}/${p.total}</span></div>`;}).join('');
+  return `<div class="plot mpWrap"><div class="plotTitle">Pass rate at MAX effort, per puzzle</div>${rows}<div class="plotCap">Every hardest puzzle solves the majority of attempts at max — no clean max-fails found.</div></div>`;
+}
+async function init(){
+  const d=await (await fetch('./data/puzzles.json')).json();PUZZLES=d.puzzles;RUNNABLE=d.runnable;
+  $('modelSel').innerHTML=RUNNABLE.map(m=>`<option value="${m.key}">${m.label}</option>`).join('');
+  STATS=await (await fetch('./data/stats.json')).json();
+  renderCards();
+  loadFeatured(pickHardest());
+}
+init();
+</script>
+</body>
+</html>
