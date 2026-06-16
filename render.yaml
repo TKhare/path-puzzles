@@ -6,9 +6,11 @@ services:
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn --chdir webapp app:app --worker-class gthread --workers 1 --threads 8 --timeout 300 --bind 0.0.0.0:$PORT"
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
       - key: ANTHROPIC_API_KEY
-        sync: false        # set this in the Render dashboard (secret) — never committed
+        sync: false        # set in the Render dashboard (secret) — never committed
       - key: LIVE_DAILY_CAP
-        value: "3"          # USD/day cap on the live "run a model" feature (across all visitors)
+        value: "3"
       - key: LIVE_PER_IP_HOUR
-        value: "6"          # live runs per visitor per hour
+        value: "6"

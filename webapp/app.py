@@ -35,7 +35,11 @@ if "ANTHROPIC_API_KEY" not in os.environ and (ROOT / ".env").exists():
         if m:
             os.environ["ANTHROPIC_API_KEY"] = m.group(1)
 
-client = anthropic.Anthropic(max_retries=2, timeout=600.0)
+try:
+    client = anthropic.Anthropic(max_retries=2, timeout=600.0)
+except Exception as _e:   # don't crash the whole app (gallery/play/stats) if the key isn't set
+    client = None
+    print(f"[warn] Anthropic client not initialized ({_e}); live runs disabled.", flush=True)
 
 WEB = Path(__file__).resolve().parent
 STATS_FILE = WEB / "stats.json"
@@ -388,6 +392,8 @@ def api_attempt():
     board_text = p["board"]
     ip = (request.headers.get("X-Forwarded-For", request.remote_addr) or "?").split(",")[0].strip()
     blocked = live_gate(ip)   # rate-limit / daily-budget guard for the public deploy
+    if client is None:
+        blocked = "Live runs aren't configured on this server (no API key set)."
 
     def gen():
         if blocked:
