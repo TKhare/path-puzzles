@@ -29,32 +29,6 @@
   "p00": [
    {
     "effort": "low",
-    "passes": 2,
-    "total": 3,
-    "rate": 67,
-    "mean_tok": 8159,
-    "mean_wall": 85
-   },
-   {
-    "effort": "high",
-    "passes": 3,
-    "total": 3,
-    "rate": 100,
-    "mean_tok": 13957,
-    "mean_wall": 148
-   },
-   {
-    "effort": "max",
-    "passes": 3,
-    "total": 4,
-    "rate": 75,
-    "mean_tok": 48412,
-    "mean_wall": 511
-   }
-  ],
-  "p01": [
-   {
-    "effort": "low",
     "passes": 0,
     "total": 3,
     "rate": 0,
@@ -78,7 +52,7 @@
     "mean_wall": 471
    }
   ],
-  "p02": [
+  "p01": [
    {
     "effort": "low",
     "passes": 1,
@@ -104,7 +78,7 @@
     "mean_wall": 316
    }
   ],
-  "p03": [
+  "p02": [
    {
     "effort": "low",
     "passes": 0,
@@ -130,7 +104,7 @@
     "mean_wall": 618
    }
   ],
-  "p04": [
+  "p03": [
    {
     "effort": "low",
     "passes": 0,
@@ -156,7 +130,7 @@
     "mean_wall": 562
    }
   ],
-  "p05": [
+  "p04": [
    {
     "effort": "low",
     "passes": 0,
@@ -185,32 +159,27 @@
  },
  "max_per_puzzle": [
   {
-   "puzzle": "p01",
+   "puzzle": "p00",
    "passes": 3,
    "total": 5
   },
   {
-   "puzzle": "p02",
+   "puzzle": "p01",
    "passes": 2,
-   "total": 3
-  },
-  {
-   "puzzle": "p05",
-   "passes": 2,
-   "total": 3
-  },
-  {
-   "puzzle": "p00",
-   "passes": 3,
-   "total": 4
-  },
-  {
-   "puzzle": "p03",
-   "passes": 3,
    "total": 3
   },
   {
    "puzzle": "p04",
+   "passes": 2,
+   "total": 3
+  },
+  {
+   "puzzle": "p02",
+   "passes": 3,
+   "total": 3
+  },
+  {
+   "puzzle": "p03",
    "passes": 3,
    "total": 3
   }

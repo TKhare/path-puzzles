@@ -81,9 +81,10 @@ def live_spent(out_tok):
 # failure on it — either (A) it FAILS even at MAX effort (stops voluntarily at
 # stop=end_turn, budget to spare, and submits a sub-optimal answer with a false
 # optimality claim), or (B) it fails CONSISTENTLY at HIGH effort.
-#   p00..p02 — MAX-effort resignations: hov_01 (~50%), s1_09 (~40%), subtle_05 (~33%).
-#   p03..p05 — consistent HIGH-effort failures (solved at max): p00, s1_01, s1_02.
-HARD_ORDER = ["hov_01", "s1_09", "subtle_05", "p00", "s1_01", "s1_02"]
+#   p00..p01 — MAX-effort resignations: s1_09 (~40%), subtle_05 (~33%).
+#   p02..p04 — consistent HIGH-effort failures (solved at max): p00, s1_01, s1_02.
+# (hov_01 dropped — too easy: solved 3/3 at high, 2/3 at low.)
+HARD_ORDER = ["s1_09", "subtle_05", "p00", "s1_01", "s1_02"]
 # hide from the stats table: historical, plus the bare live labels (no-thinking) that aren't
 # part of the documented 5-config matrix (Opus 4.5 / Sonnet 4.6 / Opus 4.8 low|high|max).
 HIDE_MODELS = {"Fable 5", "Opus 4.8", "Haiku 4.5"}

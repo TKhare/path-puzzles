@@ -29,6 +29,10 @@
   "Sonnet 4.6": {
    "attempts": 3,
    "passes": 1
+  },
+  "Opus 4.5": {
+   "attempts": 3,
+   "passes": 0
   }
  },
  "s12": {
@@ -99,6 +103,10 @@
   "Sonnet 4.6": {
    "attempts": 3,
    "passes": 1
+  },
+  "Opus 4.5": {
+   "attempts": 3,
+   "passes": 0
   }
  },
  "hov_01": {
@@ -117,6 +125,10 @@
   "Sonnet 4.6": {
    "attempts": 3,
    "passes": 2
+  },
+  "Opus 4.5": {
+   "attempts": 3,
+   "passes": 0
   }
  },
  "subtle_05": {
@@ -135,6 +147,10 @@
   "Sonnet 4.6": {
    "attempts": 3,
    "passes": 3
+  },
+  "Opus 4.5": {
+   "attempts": 3,
+   "passes": 0
   }
  },
  "s1_01": {
@@ -153,6 +169,10 @@
   "Sonnet 4.6": {
    "attempts": 3,
    "passes": 0
+  },
+  "Opus 4.5": {
+   "attempts": 3,
+   "passes": 0
   }
  },
  "s1_02": {
@@ -169,6 +189,10 @@
    "passes": 0
   },
   "Sonnet 4.6": {
+   "attempts": 3,
+   "passes": 0
+  },
+  "Opus 4.5": {
    "attempts": 3,
    "passes": 0
   }
