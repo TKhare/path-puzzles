@@ -399,11 +399,9 @@ function runModel(){
 
 // ---------- cards ----------
 function renderCards(){
-  let h='';for(const p of PUZZLES){const c=STATS&&STATS.stats[p.id]&&STATS.stats[p.id]['Opus 4.8'];
-    const rate=c&&c.attempts?`opus 4.8 ${c.passes}/${c.attempts}`:'';
+  let h='';for(const p of PUZZLES){
     h+=`<div class="card" onclick='loadFeaturedById("${p.id}")'>
-      <div class="cid">${p.display||p.id}</div><div class="csub">${p.rows}×${p.cols} · ${p.n_letters} letters</div>
-      <div class="crate">${rate}</div></div>`;}
+      <div class="cid">${p.display||p.id}</div><div class="csub">${p.rows}×${p.cols} · ${p.n_letters} letters</div></div>`;}
   $('moreCards').innerHTML=h;
 }
 
