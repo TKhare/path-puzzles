@@ -2,41 +2,73 @@
  "curve": [
   {
    "effort": "low",
-   "passes": 5,
-   "total": 31,
-   "rate": 16,
-   "mean_tok": 7260,
-   "mean_wall": 78
+   "passes": 8,
+   "total": 42,
+   "rate": 19,
+   "mean_tok": 7595,
+   "mean_wall": 82
   },
   {
    "effort": "high",
-   "passes": 6,
-   "total": 13,
-   "rate": 46,
-   "mean_tok": 23217,
-   "mean_wall": 9886
+   "passes": 11,
+   "total": 23,
+   "rate": 48,
+   "mean_tok": 21309,
+   "mean_wall": 5676
   },
   {
    "effort": "max",
-   "passes": 35,
-   "total": 40,
-   "rate": 88,
-   "mean_tok": 42756,
-   "mean_wall": 445
+   "passes": 38,
+   "total": 44,
+   "rate": 86,
+   "mean_tok": 45883,
+   "mean_wall": 480
   }
  ],
  "puzzles": {
   "p00": [
    {
-    "effort": "max",
+    "effort": "low",
     "passes": 2,
     "total": 3,
     "rate": 67,
-    "mean_tok": 38698,
-    "mean_wall": 404
+    "mean_tok": 8159,
+    "mean_wall": 85
+   },
+   {
+    "effort": "high",
+    "passes": 3,
+    "total": 3,
+    "rate": 100,
+    "mean_tok": 13957,
+    "mean_wall": 148
+   },
+   {
+    "effort": "max",
+    "passes": 3,
+    "total": 4,
+    "rate": 75,
+    "mean_tok": 48412,
+    "mean_wall": 511
    }
   ],
   "p01": [
+   {
+    "effort": "low",
+    "passes": 0,
+    "total": 3,
+    "rate": 0,
+    "mean_tok": 7918,
+    "mean_wall": 86
+   },
+   {
+    "effort": "high",
+    "passes": 0,
+    "total": 3,
+    "rate": 0,
+    "mean_tok": 22728,
+    "mean_wall": 247
+   },
    {
     "effort": "max",
     "passes": 3,
@@ -47,6 +79,22 @@
    }
   ],
   "p02": [
+   {
+    "effort": "low",
+    "passes": 1,
+    "total": 3,
+    "rate": 33,
+    "mean_tok": 7927,
+    "mean_wall": 87
+   },
+   {
+    "effort": "high",
+    "passes": 1,
+    "total": 3,
+    "rate": 33,
+    "mean_tok": 20878,
+    "mean_wall": 227
+   },
    {
     "effort": "max",
     "passes": 2,
@@ -67,11 +115,11 @@
    },
    {
     "effort": "high",
-    "passes": 0,
-    "total": 2,
-    "rate": 0,
-    "mean_tok": 24077,
-    "mean_wall": 17127
+    "passes": 1,
+    "total": 3,
+    "rate": 33,
+    "mean_tok": 21250,
+    "mean_wall": 11473
    },
    {
     "effort": "max",
@@ -86,10 +134,10 @@
    {
     "effort": "low",
     "passes": 0,
-    "total": 2,
+    "total": 3,
     "rate": 0,
-    "mean_tok": 8299,
-    "mean_wall": 89
+    "mean_tok": 9612,
+    "mean_wall": 104
    },
    {
     "effort": "high",
@@ -101,21 +149,21 @@
    },
    {
     "effort": "max",
-    "passes": 2,
-    "total": 2,
+    "passes": 3,
+    "total": 3,
     "rate": 100,
-    "mean_tok": 47748,
-    "mean_wall": 491
+    "mean_tok": 54337,
+    "mean_wall": 562
    }
   ],
   "p05": [
    {
     "effort": "low",
     "passes": 0,
-    "total": 2,
+    "total": 3,
     "rate": 0,
-    "mean_tok": 6456,
-    "mean_wall": 67
+    "mean_tok": 7533,
+    "mean_wall": 80
    },
    {
     "effort": "high",
@@ -127,11 +175,11 @@
    },
    {
     "effort": "max",
-    "passes": 1,
-    "total": 1,
-    "rate": 100,
-    "mean_tok": 50121,
-    "mean_wall": 502
+    "passes": 2,
+    "total": 3,
+    "rate": 67,
+    "mean_tok": 71222,
+    "mean_wall": 751
    }
   ]
  },
@@ -142,14 +190,19 @@
    "total": 5
   },
   {
-   "puzzle": "p00",
+   "puzzle": "p02",
    "passes": 2,
    "total": 3
   },
   {
-   "puzzle": "p02",
+   "puzzle": "p05",
    "passes": 2,
    "total": 3
+  },
+  {
+   "puzzle": "p00",
+   "passes": 3,
+   "total": 4
   },
   {
    "puzzle": "p03",
@@ -158,13 +211,8 @@
   },
   {
    "puzzle": "p04",
-   "passes": 2,
-   "total": 2
-  },
-  {
-   "puzzle": "p05",
-   "passes": 1,
-   "total": 1
+   "passes": 3,
+   "total": 3
   }
  ],
  "note": "Opus 4.8, output_config.effort knob, pure reasoning (no tools). 'max' run uncapped via streaming. Default eval effort = high."

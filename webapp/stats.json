@@ -15,8 +15,8 @@
    "perf_n": 10
   },
   "Opus 4.8 (high)": {
-   "attempts": 2,
-   "passes": 0
+   "attempts": 3,
+   "passes": 1
   },
   "Opus 4.8 (low)": {
    "attempts": 5,
@@ -25,6 +25,10 @@
   "Opus 4.8 (max)": {
    "attempts": 3,
    "passes": 3
+  },
+  "Sonnet 4.6": {
+   "attempts": 3,
+   "passes": 1
   }
  },
  "s12": {
@@ -91,6 +95,10 @@
   "Opus 4.8 (high)": {
    "attempts": 3,
    "passes": 0
+  },
+  "Sonnet 4.6": {
+   "attempts": 3,
+   "passes": 1
   }
  },
  "hov_01": {
@@ -105,6 +113,10 @@
   "Opus 4.8 (high)": {
    "attempts": 3,
    "passes": 3
+  },
+  "Sonnet 4.6": {
+   "attempts": 3,
+   "passes": 2
   }
  },
  "subtle_05": {
@@ -117,8 +129,12 @@
    "passes": 1
   },
   "Opus 4.8 (high)": {
-   "attempts": 1,
-   "passes": 0
+   "attempts": 3,
+   "passes": 1
+  },
+  "Sonnet 4.6": {
+   "attempts": 3,
+   "passes": 3
   }
  },
  "s1_01": {
@@ -133,6 +149,10 @@
   "Opus 4.8 (low)": {
    "attempts": 3,
    "passes": 0
+  },
+  "Sonnet 4.6": {
+   "attempts": 3,
+   "passes": 0
   }
  },
  "s1_02": {
@@ -141,10 +161,14 @@
    "passes": 1
   },
   "Opus 4.8 (max)": {
-   "attempts": 2,
+   "attempts": 3,
    "passes": 2
   },
   "Opus 4.8 (low)": {
+   "attempts": 3,
+   "passes": 0
+  },
+  "Sonnet 4.6": {
    "attempts": 3,
    "passes": 0
   }
