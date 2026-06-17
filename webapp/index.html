@@ -365,12 +365,13 @@ function loadFeatured(puz){
 function loadFeaturedById(id){loadFeatured(PUZZLES.find(p=>p.id===id));}
 function nextPuzzle(){loadFeatured(PUZZLES[(curIdx+1)%PUZZLES.length]);}
 function newPuzzle(){loadFeatured(PUZZLES[Math.floor(Math.random()*PUZZLES.length)]);}
-function pickHardest(){   // random among the puzzles with the lowest Opus 4.8 pass rate
-  const rate=p=>{const c=STATS&&STATS.stats[p.id]&&STATS.stats[p.id]['Opus 4.8'];
-    return c&&c.attempts?c.passes/c.attempts:1;};
-  const lo=Math.min(...PUZZLES.map(rate));
-  const cands=PUZZLES.filter(p=>rate(p)===lo);
-  return cands[Math.floor(Math.random()*cands.length)]||PUZZLES[0];
+function pickHardest(){   // first board: weighted-random, biased toward boards Opus 4.8 fails most at HIGH effort
+  const fail=p=>{const c=STATS&&STATS.stats[p.id]&&STATS.stats[p.id]['Opus 4.8 (high)'];
+    return c&&c.attempts?1-c.passes/c.attempts:0.5;};   // fraction Opus 4.8 fails at high (0.5 if unknown)
+  const w=PUZZLES.map(p=>0.15+fail(p));                 // floor so every board can still appear, harder weighted more
+  let r=Math.random()*w.reduce((a,b)=>a+b,0);
+  for(let i=0;i<PUZZLES.length;i++){if((r-=w[i])<=0)return PUZZLES[i];}
+  return PUZZLES[PUZZLES.length-1]||PUZZLES[0];
 }
 function recordSolve(pid,secs){               // time from first touch to solve → backend
   fetch('/api/solve',{method:'POST',headers:{'Content-Type':'application/json'},
